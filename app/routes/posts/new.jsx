@@ -1,13 +1,15 @@
 import { redirect, Link } from 'remix'
+import { db } from '~/utils/db.server'
 
 export const action = async ({ request }) => {
   const form = await request.formData()
   const title = form.get('title')
   const body = form.get('body')
-  const fileds = { title, body }
+  const fields = { title, body }
 
-  // @todo - submit to database
-  return redirect('/posts')
+  const post = await db.post.create({ data: fields })
+
+  return redirect(`/posts/${post.id}`)
 }
 
 function NewPost() {
